@@ -2,8 +2,6 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.BookingValidationException;
 import ru.practicum.shareit.exception.ItemNotFoundException;
@@ -118,15 +116,10 @@ public class ItemServiceImpl implements ItemService {
         User user = UserMapper.MapToUser(userService.getUserById(userId));
         Item item = ItemMapper.mapToItem(getItemByItemId(itemId, userId));
 
-        List<Booking> bookingList = bookingRepository.findAll()
-                .stream()
-                .filter(booking -> booking.getBooker().getId() == userId &&
-                                   booking.getEnd().isBefore(LocalDateTime.now()) &&
-                                   booking.getStatus().equals(Status.APPROVED))
-                .toList();
-        if (bookingList.isEmpty()) {
+        if (!bookingRepository.checkBookingByBookerAndItem(user, item, LocalDateTime.now())) {
             throw new BookingValidationException("Данный booking не завершен");
         }
+
         Comment comment = new Comment();
         comment.setId(nextCommentId++);
         comment.setText(requestComment.getText());

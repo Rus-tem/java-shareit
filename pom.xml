@@ -163,11 +163,11 @@
                         </execution>
                     </executions>
                     <dependencies>
-                        <!--<dependency>
+                        <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
                             <version>10.18.1</version>
-                        </dependency>-->
+                        </dependency>
                     </dependencies>
                 </plugin>
                 <plugin>

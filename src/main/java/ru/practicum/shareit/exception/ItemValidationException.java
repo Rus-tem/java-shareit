@@ -7,8 +7,7 @@ import ru.practicum.shareit.item.model.Item;
 public class ItemValidationException extends RuntimeException {
     Item item;
 
-    public ItemValidationException(String message, Item item) {
+    public ItemValidationException(String message) {
         super(message);
-        this.item = item;
     }
 }

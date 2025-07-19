@@ -1,11 +1,15 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.UserConflictException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.exception.UserValidationException;
+import ru.practicum.shareit.user.dto.RequestUser;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,46 +27,50 @@ class UserServiceImpl implements UserService {
 
     @Override
     //Получение списка всех пользователей
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream().map(UserMapper::mapToUserDto).toList();
     }
 
     // Сохранение пользователя
     @Override
-    public User saveUser(User user) {
+    public UserDto saveUser(RequestUser requestUser) {
+        User user = UserMapper.requestUserMapToUser(requestUser);
         checkUser(user);
         checkDuplicateEmailUser(user);
         user.setId(nextUserId++);
-        return userRepository.save(user);
+        userRepository.save(user);
+        return UserMapper.mapToUserDto(user);
     }
 
-    // Обновление пользователя
+    //  Обновление пользователя
     @Override
-    public User updateUser(Long userId, User newUser) {
-
-        User oldUser = getUserById(userId);
+    public UserDto updateUser(Long userId, RequestUser requestUser) {
+        User newUser = UserMapper.requestUserMapToUser(requestUser);
+        UserDto oldUserDto = getUserById(userId);
         if (newUser.getEmail() == null && newUser.getName() == null) {
             throw new UserNotFoundException("Не заполнены поля: Имя пользователя и Email");
         }
         if (newUser.getName() == null || newUser.getName().isBlank()) {
-            newUser.setName(oldUser.getName());
+            newUser.setName(oldUserDto.getName());
         }
         if (newUser.getEmail() == null || newUser.getEmail().isBlank()) {
-            newUser.setEmail(oldUser.getEmail());
+            newUser.setEmail(oldUserDto.getEmail());
         } else {
             checkDuplicateEmailUser(newUser);
         }
-        return userRepository.update(oldUser, newUser);
+        newUser.setId(userId);
+        userRepository.save(newUser);
+        return UserMapper.mapToUserDto(newUser);
     }
 
     //Поиск пользователя по ID
     @Override
-    public User getUserById(Long userId) {
+    public UserDto getUserById(Long userId) {
         Optional<User> foundUser = userRepository.findAll().stream()
                 .filter(user -> user.getId().equals(userId))
                 .findFirst();
         if (foundUser.isPresent()) {
-            return foundUser.get();
+            return UserMapper.mapToUserDto(foundUser.get());
         } else {
             throw new UserNotFoundException("Такой пользователь не найден");
         }
@@ -71,7 +79,9 @@ class UserServiceImpl implements UserService {
     // Удаление пользователя
     @Override
     public void deleteUser(Long userId) {
-        userRepository.delete(getUserById(userId));
+        //UserDto userDto = getUserById(userId);
+        userRepository.deleteById(userId);
+        //userRepository.delete(getUserById(userId));
     }
 
     // Поиск пользователя по email

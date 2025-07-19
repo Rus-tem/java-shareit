@@ -2,12 +2,10 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.dto.RequestBookingDto;
-import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.booking.service.*;
+import ru.practicum.shareit.booking.dto.*;
 
 import java.util.List;
-
 
 @RestController
 @RequiredArgsConstructor

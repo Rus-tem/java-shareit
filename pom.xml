@@ -275,12 +275,13 @@
           <profile>
               <id>coverage</id>
               <build>
-                  <!--    <plugins>
-                         <plugin>
+                     <plugins>
+                  <!--       <plugin>
                              <groupId>org.jacoco</groupId>
                              <artifactId>jacoco-maven-plugin</artifactId>
-                         </plugin>
-                     </plugins> -->
+                             <version>0.8.12</version>
+                         </plugin> -->
+                     </plugins>
                  </build>
              </profile>
          </profiles>

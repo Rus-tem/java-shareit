@@ -2,11 +2,14 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.dto.*;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.RequestBookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
-import ru.practicum.shareit.booking.model.*;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exception.*;
+import ru.practicum.shareit.exception.BookingValidationException;
+import ru.practicum.shareit.exception.ItemValidationException;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
@@ -27,7 +30,7 @@ public class BookingServiceImpl implements BookingService {
     //Получение Booking по ID
     @Override
     public BookingDto getBooking(Long userId, Long bookingId) {
-        User booker = UserMapper.MapToUser(userService.getUserById(userId));
+        User booker = UserMapper.mapToUser(userService.getUserById(userId));
         Booking booking = bookingRepository.findById(bookingId).get();
         return BookingMapper.mapToBookingDto(booking);
     }
@@ -35,7 +38,7 @@ public class BookingServiceImpl implements BookingService {
     // Получение списка Booking по owner
     @Override
     public List<BookingDto> getBookingByOwner(Long userId) {
-        User booker = UserMapper.MapToUser(userService.getUserById(userId));
+        User booker = UserMapper.mapToUser(userService.getUserById(userId));
         List<Booking> listOfBooking = bookingRepository.getAllBooking(booker);
         return listOfBooking.stream().map(BookingMapper::mapToBookingDto).toList();
     }
@@ -43,7 +46,7 @@ public class BookingServiceImpl implements BookingService {
     // Получение списка Booking по userId
     @Override
     public List<BookingDto> getAllBooking(Long userId) {
-        User user = UserMapper.MapToUser(userService.getUserById(userId));
+        User user = UserMapper.mapToUser(userService.getUserById(userId));
         List<Booking> listOfBooking = bookingRepository.getAllBooking(user);
         return listOfBooking.stream().map(BookingMapper::mapToBookingDto).toList();
     }
@@ -51,7 +54,7 @@ public class BookingServiceImpl implements BookingService {
     //Сохранение Booking
     @Override
     public BookingDto saveBooking(Long userId, RequestBookingDto requestBookingDto) {
-        User booker = UserMapper.MapToUser(userService.getUserById(userId));
+        User booker = UserMapper.mapToUser(userService.getUserById(userId));
         Item item = ItemMapper.mapToItem(itemService.getItemByItemId(requestBookingDto.getItemId(), userId));
         Booking booking = BookingMapper.mapToBooking(requestBookingDto, item, booker);
         checkBooking(booking);

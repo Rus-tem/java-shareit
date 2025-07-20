@@ -9,6 +9,6 @@ public class RequestItemDto {
     private String name;
     private String description;
     private Boolean available;
-    private User owner_id;
-    private Long request_id;
+    private User owner;
+    private Long request;
 }

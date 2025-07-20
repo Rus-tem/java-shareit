@@ -27,7 +27,7 @@ public class Item {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
     @Column(name = "request_id", nullable = false)
-    private Long request_id;
+    private Long request;
 
     public Item(Long id) {
         this.id = id;

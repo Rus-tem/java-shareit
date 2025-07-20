@@ -18,5 +18,5 @@ public class ItemRequest {
     @Column(name = "description", nullable = false)
     private String description;
     @Column(name = "requestor_id", nullable = false)
-    private String requestor_id;
+    private String requestItem;
 }

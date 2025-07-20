@@ -5,12 +5,16 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exception.*;
+import ru.practicum.shareit.exception.BookingValidationException;
+import ru.practicum.shareit.exception.ItemNotFoundException;
+import ru.practicum.shareit.exception.ItemValidationException;
 import ru.practicum.shareit.item.comment.CommentRepository;
-import ru.practicum.shareit.item.comment.dto.*;
+import ru.practicum.shareit.item.comment.dto.CommentDto;
+import ru.practicum.shareit.item.comment.dto.RequestComment;
 import ru.practicum.shareit.item.comment.mapper.CommentMapper;
 import ru.practicum.shareit.item.comment.model.Comment;
-import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.RequestItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -47,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
         ItemDto itemDto = ItemMapper.mapToItemDto(itemOptional.get());
         List<CommentDto> commentDtoList = commentRepository.findAll()
                 .stream()
-                .filter(comment -> comment.getItem_id().getId() == itemId)
+                .filter(comment -> comment.getItem().getId() == itemId)
                 .map(CommentMapper::mapToCommentDto)
                 .toList();
         itemDto.setComments(commentDtoList);
@@ -78,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
         checkItem(item);
         UserDto userDto = userService.getUserById(userId);///
         item.setId(nextItemId++);
-        item.setOwner(UserMapper.MapToUser(userDto));///
+        item.setOwner(UserMapper.mapToUser(userDto));///
         itemRepository.save(item);
         return ItemMapper.mapToItemDto(item);
     }
@@ -88,8 +92,8 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto updateItem(Long itemId, RequestItemDto requestItemDto, Long userId) {
         Item newItem = ItemMapper.requestItemMapToItem(requestItemDto);
         ItemDto oldItem = getItemByItemId(itemId, userId);
-        User user = UserMapper.MapToUser(userService.getUserById(userId));
-        if (oldItem.getOwner_id().getId() != user.getId()) {
+        User user = UserMapper.mapToUser(userService.getUserById(userId));
+        if (oldItem.getOwner().getId() != user.getId()) {
             throw new ItemNotFoundException("Не корректное значение userId");
         }
         if (newItem.getAvailable() == null) {
@@ -111,7 +115,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public CommentDto saveComment(Long userId, RequestComment requestComment, Long itemId) {
 
-        User user = UserMapper.MapToUser(userService.getUserById(userId));
+        User user = UserMapper.mapToUser(userService.getUserById(userId));
         Item item = ItemMapper.mapToItem(getItemByItemId(itemId, userId));
 
         List<Booking> bookingList = bookingRepository.findAll()
@@ -128,8 +132,8 @@ public class ItemServiceImpl implements ItemService {
         Comment comment = new Comment();
         comment.setId(nextCommentId++);
         comment.setText(requestComment.getText());
-        comment.setItem_id(item);
-        comment.setAuthor_id(user);
+        comment.setItem(item);
+        comment.setAuthor(user);
         comment.setCreated(LocalDateTime.now());
         commentRepository.save(comment);
         return CommentMapper.mapToCommentDto(comment);

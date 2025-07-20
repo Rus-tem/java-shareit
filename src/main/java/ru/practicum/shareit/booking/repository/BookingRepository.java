@@ -18,16 +18,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("SELECT b FROM Booking b WHERE b.booker = :booker")
     List<Booking> getAllBookingByOwner(@Param("booker") User booker);
 
-    @Query("""
-            SELECT COUNT(b) > 0
-            FROM Booking b
-            WHERE b.booker = :userId
-            AND b.item = :itemId
-            AND b.end < :time
-            """)
-    Boolean checkBookingByBookerAndItem(@Param("userId") User userId,
-                                        @Param("itemId") Item itemId,
-                                        @Param("time") LocalDateTime time);
 }
 
 

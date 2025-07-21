@@ -8,7 +8,7 @@ import ru.practicum.shareit.user.model.User;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 @Getter
 public class UserNotFoundException extends RuntimeException {
-    User user;
+    private User user;
 
     public UserNotFoundException(String message) {
         super(message);

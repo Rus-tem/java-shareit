@@ -79,9 +79,7 @@ class UserServiceImpl implements UserService {
     // Удаление пользователя
     @Override
     public void deleteUser(Long userId) {
-        //UserDto userDto = getUserById(userId);
         userRepository.deleteById(userId);
-        //userRepository.delete(getUserById(userId));
     }
 
     // Поиск пользователя по email

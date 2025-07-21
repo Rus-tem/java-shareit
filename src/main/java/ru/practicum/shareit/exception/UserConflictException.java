@@ -5,7 +5,7 @@ import ru.practicum.shareit.user.model.User;
 
 @Getter
 public class UserConflictException extends RuntimeException {
-    User user;
+    private User user;
 
     public UserConflictException(String message, User user) {
         super(message);

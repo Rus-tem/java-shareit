@@ -8,7 +8,7 @@ import ru.practicum.shareit.item.model.Item;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 @Getter
 public class ItemNotFoundException extends RuntimeException {
-    Item item;
+    private Item item;
 
     public ItemNotFoundException(String message) {
         super(message);

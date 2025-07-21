@@ -5,7 +5,7 @@ import ru.practicum.shareit.booking.model.Booking;
 
 @Getter
 public class BookingValidationException extends RuntimeException {
-    Booking booking;
+    private Booking booking;
 
     public BookingValidationException(String message) {
         super(message);

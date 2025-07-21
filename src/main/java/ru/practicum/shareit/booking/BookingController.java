@@ -14,13 +14,14 @@ import java.util.List;
 public class BookingController {
     private final BookingService bookingService;
 
-
+    // Получение booking по ID
     @GetMapping("/{bookingId}")
     public BookingDto getBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
                                  @PathVariable("bookingId") Long bookingId) {
         return bookingService.getBooking(userId, bookingId);
     }
 
+    // Получение booking по ownerId
     @GetMapping("/owner")
     public List<BookingDto> getBookingByOwner(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return bookingService.getBookingByOwner(userId);

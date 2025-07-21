@@ -51,7 +51,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(NullFoundException.class)
     public ResponseEntity<Map<String, Booking>> handleNullFoundValidationException(NullFoundException ex) {
-        Map<String, Booking> error = Map.of(ex.getMessage(), ex.booking);
+        Map<String, Booking> error = Map.of(ex.getMessage(), ex.getBooking());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

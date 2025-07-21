@@ -8,7 +8,7 @@ import ru.practicum.shareit.booking.model.Booking;
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 @Getter
 public class NullFoundException extends RuntimeException {
-    Booking booking;
+    private Booking booking;
 
     public NullFoundException(String message) {
         super(message);

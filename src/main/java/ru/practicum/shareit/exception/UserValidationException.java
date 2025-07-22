@@ -5,7 +5,7 @@ import ru.practicum.shareit.user.model.User;
 
 @Getter
 public class UserValidationException extends RuntimeException {
-    User user;
+    private User user;
 
     public UserValidationException(String message, User user) {
         super(message);

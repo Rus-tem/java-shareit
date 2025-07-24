@@ -2,7 +2,6 @@ package ru.practicum.shareit.request.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import ru.practicum.shareit.exception.RequestNotFoundException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.item.model.Item;
@@ -14,7 +13,6 @@ import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
 import java.util.Set;
@@ -62,7 +60,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public RequestDto getRequestById(Long requestId, Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Данный пользователь не найден"));
-        Request request = requestRepository.findById(requestId).orElseThrow(() ->  new RequestNotFoundException("Данный request не найден"));
+        Request request = requestRepository.findById(requestId).orElseThrow(() -> new RequestNotFoundException("Данный request не найден"));
         Set<Item> setOfItems = itemRepository.findAll()
                 .stream()
                 .filter(item -> item.getRequest().getId().equals(requestId))

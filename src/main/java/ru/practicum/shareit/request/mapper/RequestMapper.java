@@ -2,7 +2,8 @@ package ru.practicum.shareit.request.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.request.dto.*;
+import ru.practicum.shareit.request.dto.RequestDto;
+import ru.practicum.shareit.request.dto.RequestItemDto;
 import ru.practicum.shareit.request.model.Request;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

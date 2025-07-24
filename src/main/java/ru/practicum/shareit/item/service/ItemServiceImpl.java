@@ -83,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto saveItem(Long userId, RequestItemDto requestItemDto) {
         Item item = ItemMapper.requestItemMapToItem(requestItemDto);
-        if(requestItemDto.getRequestId() != null) {
+        if (requestItemDto.getRequestId() != null) {
             Request request = requestRepository.findById(requestItemDto.getRequestId()).orElseThrow(() -> new RequestNotFoundException("Данный request не найден"));
             item.setRequest(request);
         }

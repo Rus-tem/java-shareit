@@ -18,7 +18,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByBookerIdOrderByStartDesc(Long userId);
 
-    @Query ("""
+    @Query("""
             SELECT b FROM Booking b
             inner join User as u ON b.booker.id = u.id
             inner join Item as i ON b.item.id = i.id

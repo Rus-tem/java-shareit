@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.comment.dto.CommentDto;
+import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
@@ -20,5 +21,5 @@ public class ItemDto {
     private Long nextBooking;
     private List<CommentDto> comments;
     private User owner;
-    private Long request;
+    private Request request;
 }

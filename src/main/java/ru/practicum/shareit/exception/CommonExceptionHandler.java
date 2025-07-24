@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Map;
@@ -53,5 +54,11 @@ public class CommonExceptionHandler {
     public ResponseEntity<Map<String, Booking>> handleNullFoundValidationException(NullFoundException ex) {
         Map<String, Booking> error = Map.of(ex.getMessage(), ex.getBooking());
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(RequestNotFoundException.class)
+    public ResponseEntity<Map<String, Request>> handleRequestNotFoundException(RequestNotFoundException ex) {
+        Map<String, Request> error = Map.of(ex.getMessage(), ex.getRequest());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }

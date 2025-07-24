@@ -12,5 +12,5 @@ public class RequestItemDto {
     private String description;
     private Boolean available;
     private User owner;
-    private Long request;
+    private Long requestId;
 }

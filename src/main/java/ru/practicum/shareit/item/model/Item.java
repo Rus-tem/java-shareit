@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.model.User;
 
 @Data
@@ -23,11 +24,12 @@ public class Item {
     private String description;
     @Column(name = "is_available", nullable = false)
     private Boolean available;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
-    @Column(name = "request_id", nullable = false)
-    private Long request;
+    @ManyToOne
+    @JoinColumn(name = "request_id", nullable = false)
+    private Request request;
 
     public Item(Long id) {
         this.id = id;

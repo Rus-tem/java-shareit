@@ -46,9 +46,17 @@ public class BookingServiceImpl implements BookingService {
     // Получение списка Booking по userId
     @Override
     public List<BookingDto> getAllBooking(Long userId) {
-        User user = UserMapper.mapToUser(userService.getUserById(userId));
-        List<Booking> listOfBooking = bookingRepository.getAllBooking(user);
+             User user = UserMapper.mapToUser(userService.getUserById(userId));
+            List<Booking> listOfBooking = bookingRepository.getAllBooking(user);/// конец изначальный
+      //  List<Booking> listOfBooking = bookingRepository.findByBookerIdOrderByStartDesc(userId);
+       //    List<Booking> listOfBooking = bookingRepository.findBookerByUserId(user.getId());
+
         return listOfBooking.stream().map(BookingMapper::mapToBookingDto).toList();
+//        return bookingRepository.findAll()
+//                .stream()
+//                .filter(booking -> booking.getBooker().getId().equals(userId))
+//                .map(BookingMapper::mapToBookingDto)
+//                .toList();
     }
 
     //Сохранение Booking

@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.user.model.User;
 
 @Data
@@ -12,5 +13,5 @@ public class RequestItemDto {
     private String description;
     private Boolean available;
     private User owner;
-    private Long request;
+    private Long requestId;
 }

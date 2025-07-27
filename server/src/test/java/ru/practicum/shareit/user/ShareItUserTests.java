@@ -1,4 +1,4 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.user;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -6,7 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.practicum.shareit.user.UserController;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
@@ -55,5 +54,14 @@ class ShareItUserTests {
         assertEquals(actualUser.getName(), userToSave.getName());
         assertEquals(actualUser.getEmail(), userToSave.getEmail());
     }
+    @Test
+    void updateUser() {
+        User userToSave = new User(1L, "user1", "user1@user1.ru");
+        
+
+
+    }
+
+
 
 }

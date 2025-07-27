@@ -54,14 +54,13 @@ class ShareItUserTests {
         assertEquals(actualUser.getName(), userToSave.getName());
         assertEquals(actualUser.getEmail(), userToSave.getEmail());
     }
+
     @Test
     void updateUser() {
         User userToSave = new User(1L, "user1", "user1@user1.ru");
-        
 
 
     }
-
 
 
 }

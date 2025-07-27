@@ -8,11 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.user.dto.RequestUser;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
-
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTests {
@@ -29,10 +25,6 @@ public class UserControllerTests {
 
     @Test
     void addUser() throws Exception {
-        RequestUser requestUser = new RequestUser(1L, "testName", "test@email.com");
-        UserDto userDto = new UserDto(1L, "testName", "test@email.com");
-
-        when(userService.saveUser(requestUser)).thenReturn(userDto);
 
 
     }

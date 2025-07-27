@@ -69,10 +69,10 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto approveBooking(Long bookingId, Long userId, Boolean searchQuery) {
         Booking booking = bookingRepository.findById(bookingId).get();
-        if ((booking.getItem().getOwner().getId() == userId) && searchQuery) {
+        if ((booking.getItem().getOwner().getId().equals(userId)) && searchQuery) {
             booking.setStatus(Status.APPROVED);
             bookingRepository.save(booking);
-        } else if ((booking.getItem().getOwner().getId() == userId) && !searchQuery) {
+        } else if ((booking.getItem().getOwner().getId().equals(userId)) && !searchQuery) {
             booking.setStatus(Status.REJECTED);
             bookingRepository.save(booking);
         } else {

@@ -55,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
         ItemDto itemDto = ItemMapper.mapToItemDto(itemOptional.get());
         List<CommentDto> commentDtoList = commentRepository.findAll()
                 .stream()
-                .filter(comment -> comment.getItem().getId() == itemId)
+                .filter(comment -> comment.getItem().getId().equals(itemId))
                 .map(CommentMapper::mapToCommentDto)
                 .toList();
         itemDto.setComments(commentDtoList);
@@ -101,7 +101,7 @@ public class ItemServiceImpl implements ItemService {
         Item newItem = ItemMapper.requestItemMapToItem(requestItemDto);
         ItemDto oldItem = getItemByItemId(itemId, userId);
         User user = UserMapper.mapToUser(userService.getUserById(userId));
-        if (oldItem.getOwner().getId() != user.getId()) {
+        if (!oldItem.getOwner().getId().equals(user.getId())) {
             throw new ItemNotFoundException("Не корректное значение userId");
         }
         if (newItem.getAvailable() == null) {
@@ -128,7 +128,7 @@ public class ItemServiceImpl implements ItemService {
 
         List<Booking> bookingList = bookingRepository.findAll()
                 .stream()
-                .filter(booking -> booking.getBooker().getId() == userId &&
+                .filter(booking -> booking.getBooker().getId().equals(userId) &&
                                    booking.getEnd().isBefore(LocalDateTime.now()) &&
                                    booking.getStatus().equals(Status.APPROVED))
                 .toList();

@@ -17,12 +17,11 @@ public class BaseClient {
         this.rest = rest;
     }
 
-    // Вывод getUserById 1 объект
     protected ResponseEntity<Object> get(String path) {
         return get(path, null, null);
     }
 
-    protected ResponseEntity<Object> get(String path, long userId) {
+    public ResponseEntity<Object> get(String path, long userId) {
         return get(path, userId, null);
     }
 
@@ -41,7 +40,7 @@ public class BaseClient {
         return post(path, null, null, body);
     }
 
-    protected <T> ResponseEntity<Object> post(String path, long userId, T body) {
+    public <T> ResponseEntity<Object> post(String path, long userId, T body) {
         return post(path, userId, null, body);
     }
 
@@ -57,7 +56,7 @@ public class BaseClient {
         return makeAndSendRequest(HttpMethod.PUT, path, userId, parameters, body);
     }
 
-    protected <T> ResponseEntity<Object> patch(String path, T body) {
+    public <T> ResponseEntity<Object> patch(String path, T body) {
         return patch(path, null, null, body);
     }
 

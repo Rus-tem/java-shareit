@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
-class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private Long nextUserId = 1L;
     private static final String EMAIL_PATTERN =
@@ -91,7 +91,7 @@ class UserServiceImpl implements UserService {
     }
 
     // Метод для проверки имени пользователя
-    private void checkUser(User user) {
+    protected void checkUser(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
             throw new UserValidationException("Не корректное имя пользователя", user);
         }
@@ -101,7 +101,7 @@ class UserServiceImpl implements UserService {
     }
 
     // Метод для проверки дубля email пользователя
-    private void checkDuplicateEmailUser(User user) {
+    protected void checkDuplicateEmailUser(User user) {
         if (getUserByEmail(user.getEmail()).isPresent()) {
             throw new UserConflictException("Данный email уже используется", user);
         }

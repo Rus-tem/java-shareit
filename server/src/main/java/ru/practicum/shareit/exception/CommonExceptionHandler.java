@@ -33,9 +33,9 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler(ItemValidationException.class)
-    public ResponseEntity<Map<String, Item>> handleItemValidationException(ItemValidationException ex) {
-        Map<String, Item> error = Map.of(ex.getMessage(), ex.getItem());
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Map<String, String>> handleItemValidationException(ItemValidationException ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
+
     }
 
     @ExceptionHandler(ItemNotFoundException.class)
@@ -45,9 +45,8 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler(BookingValidationException.class)
-    public ResponseEntity<Map<String, Booking>> handleBookingValidationException(BookingValidationException ex) {
-        Map<String, Booking> error = Map.of(ex.getMessage(), ex.getBooking());
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Map<String, String>> handleBookingValidationException(BookingValidationException ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NullFoundException.class)

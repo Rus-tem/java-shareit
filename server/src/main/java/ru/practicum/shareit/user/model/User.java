@@ -19,4 +19,5 @@ public class User {
     private String name;
     @Column(name = "email", nullable = false)
     private String email;
+
 }

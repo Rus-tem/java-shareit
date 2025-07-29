@@ -3,23 +3,26 @@ package ru.practicum.shareit.request.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.exception.RequestNotFoundException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.dto.RequestItemDto;
+import ru.practicum.shareit.request.mapper.RequestMapper;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.request.repository.RequestRepository;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -125,5 +128,57 @@ class RequestServiceImplTest {
         assertThrows(RequestNotFoundException.class, () -> {
             requestService.getRequestById(999L, 1L);
         });
+    }
+
+    @Test
+    void mapToRequest_shouldMapCorrectly() {
+        RequestItemDto dto = new RequestItemDto();
+        dto.setDescription("Test Description");
+        LocalDateTime now = LocalDateTime.now();
+        dto.setCreated(now);
+
+        Request request = RequestMapper.mapToRequest(dto);
+
+        assertEquals("Test Description", request.getDescription());
+        assertEquals(now, request.getCreated());
+    }
+
+    @Test
+    void mapToRequestDto_shouldMapCorrectly() {
+        User user = new User(1L, "John", "john@example.com");
+        Request request = new Request(1L, "Need item", user, LocalDateTime.now());
+
+        UserDto userDto = new UserDto(1L, "john@example.com", "John");
+
+        try (MockedStatic<UserMapper> mockedStatic = Mockito.mockStatic(UserMapper.class)) {
+            mockedStatic.when(() -> UserMapper.mapToUserDto(user)).thenReturn(userDto);
+
+            RequestDto dto = RequestMapper.mapToRequestDto(request);
+
+            assertEquals(request.getId(), dto.getId());
+            assertEquals(request.getDescription(), dto.getDescription());
+            assertEquals(userDto, dto.getRequester());
+            assertEquals(request.getCreated(), dto.getCreated());
+        }
+    }
+
+    @Test
+    void mapRequestDtoToRequest_shouldMapCorrectly() {
+        UserDto userDto = new UserDto(1L, "john@example.com", "John");
+        LocalDateTime now = LocalDateTime.now();
+        RequestDto dto = new RequestDto(1L, "Test description", userDto, now, Set.of());
+
+        User user = new User(1L, "John", "john@example.com");
+
+        try (MockedStatic<UserMapper> mockedStatic = Mockito.mockStatic(UserMapper.class)) {
+            mockedStatic.when(() -> UserMapper.mapToUser(userDto)).thenReturn(user);
+
+            Request request = RequestMapper.mapRequestDtoToRequest(dto);
+
+            assertEquals(dto.getId(), request.getId());
+            assertEquals(dto.getDescription(), request.getDescription());
+            assertEquals(user, request.getRequester());
+            assertEquals(dto.getCreated(), request.getCreated());
+        }
     }
 }

@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.practicum.shareit.exception.UserConflictException;
 import ru.practicum.shareit.exception.UserNotFoundException;
+import ru.practicum.shareit.exception.UserValidationException;
 import ru.practicum.shareit.user.dto.RequestUser;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
@@ -111,6 +113,51 @@ class UserServiceImplTest {
     }
 
     @Test
+    void saveUser_shouldThrowValidationException_whenNameIsBlank() {
+        RequestUser requestUser = new RequestUser(null, " ", "valid@example.com");
+
+        // При попытке проверки имени должен бросаться UserValidationException
+        doCallRealMethod().when(userService).checkUser(any(User.class)); // Вызвать реальный метод
+
+        UserValidationException ex = assertThrows(UserValidationException.class, () -> {
+            userService.saveUser(requestUser);
+        });
+
+        assertTrue(ex.getMessage().contains("Не корректное имя пользователя"));
+    }
+
+    @Test
+    void saveUser_shouldThrowValidationException_whenEmailInvalid() {
+        RequestUser requestUser = new RequestUser(null, "Valid Name", "invalid-email");
+
+        doCallRealMethod().when(userService).checkUser(any(User.class));
+
+        UserValidationException ex = assertThrows(UserValidationException.class, () -> {
+            userService.saveUser(requestUser);
+        });
+
+        assertTrue(ex.getMessage().contains("Не корректный email"));
+    }
+
+    @Test
+    void saveUser_shouldThrowConflictException_whenEmailDuplicate() {
+        RequestUser requestUser = new RequestUser(null, "Valid Name", "duplicate@example.com");
+        User user = new User(null, "Valid Name", "duplicate@example.com");
+
+        doNothing().when(userService).checkUser(any(User.class)); // пропускаем проверку имени/емейла
+        doCallRealMethod().when(userService).checkDuplicateEmailUser(any(User.class)); // реальный метод
+
+        // Мокаем getUserByEmail чтобы он нашел дубликат
+        when(userRepository.findAll()).thenReturn(List.of(user));
+
+        UserConflictException ex = assertThrows(UserConflictException.class, () -> {
+            userService.saveUser(requestUser);
+        });
+
+        assertTrue(ex.getMessage().contains("Данный email уже используется"));
+    }
+
+    @Test
     void updateUser() {
         Long userId = 1L;
 
@@ -157,6 +204,21 @@ class UserServiceImplTest {
             verify(userRepository).save(any(User.class));
             verify(userService).checkDuplicateEmailUser(any(User.class));
         }
+    }
+
+    @Test
+    void updateUser_shouldThrowUserNotFoundException_whenNameAndEmailNull() {
+        Long userId = 1L;
+        RequestUser requestUser = new RequestUser(null, null, null);
+
+        UserDto oldUserDto = new UserDto(userId, "old@example.com", "Old Name");
+        doReturn(oldUserDto).when(userService).getUserById(userId);
+
+        UserNotFoundException ex = assertThrows(UserNotFoundException.class, () -> {
+            userService.updateUser(userId, requestUser);
+        });
+
+        assertEquals("Не заполнены поля: Имя пользователя и Email", ex.getMessage());
     }
 
     @Test

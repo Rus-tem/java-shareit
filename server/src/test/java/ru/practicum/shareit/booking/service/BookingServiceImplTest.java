@@ -226,4 +226,50 @@ class BookingServiceImplTest {
             assertEquals(1, result.size());
         }
     }
+
+    @Test
+    void mapToBookingDto_shouldMapCorrectly() {
+        // given
+        User user = new User(1L, "User", "user@example.com");
+        Item item = new Item(1L, "Item", "desc", true, user, null);
+        Booking booking = new Booking();
+        booking.setId(10L);
+        booking.setStart(LocalDateTime.now().plusDays(1));
+        booking.setEnd(LocalDateTime.now().plusDays(2));
+        booking.setBooker(user);
+        booking.setItem(item);
+        booking.setStatus(Status.APPROVED);
+
+        // when
+        BookingDto dto = BookingMapper.mapToBookingDto(booking);
+
+        // then
+        assertEquals(booking.getId(), dto.getId());
+        assertEquals(booking.getStart(), dto.getStart());
+        assertEquals(booking.getEnd(), dto.getEnd());
+        assertEquals(booking.getStatus(), dto.getStatus());
+        assertNotNull(dto.getItem());
+        assertNotNull(dto.getBooker());
+    }
+
+    @Test
+    void mapToBooking_shouldMapCorrectly() {
+        // given
+        RequestBookingDto dto = new RequestBookingDto(
+                LocalDateTime.now().plusDays(1),
+                LocalDateTime.now().plusDays(2),
+                5L
+        );
+        User user = new User(1L, "User", "user@example.com");
+        Item item = new Item(5L, "Item", "desc", true, user, null);
+
+        // when
+        Booking booking = BookingMapper.mapToBooking(dto, item, user);
+
+        // then
+        assertEquals(dto.getStart(), booking.getStart());
+        assertEquals(dto.getEnd(), booking.getEnd());
+        assertEquals(user, booking.getBooker());
+        assertEquals(item, booking.getItem());
+    }
 }

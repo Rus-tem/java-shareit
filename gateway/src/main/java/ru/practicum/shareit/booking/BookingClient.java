@@ -12,6 +12,7 @@ import ru.practicum.shareit.booking.dto.RequestBookingDto;
 import ru.practicum.shareit.client.BaseClient;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BookingClient extends BaseClient {
@@ -63,7 +64,8 @@ public class BookingClient extends BaseClient {
     }
 
     public ResponseEntity<Object> approveBooking(Long bookingId, Long userId, Boolean searchQuery) {
-        return patch("/" + bookingId + "?approved=" + searchQuery, userId);
+        Map<String, Object> params = Map.of("approved", searchQuery);
+        return patch("/" + bookingId, userId, params, null);
     }
 
 

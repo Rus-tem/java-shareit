@@ -229,7 +229,6 @@ class BookingServiceImplTest {
 
     @Test
     void mapToBookingDto_shouldMapCorrectly() {
-        // given
         User user = new User(1L, "User", "user@example.com");
         Item item = new Item(1L, "Item", "desc", true, user, null);
         Booking booking = new Booking();
@@ -240,10 +239,8 @@ class BookingServiceImplTest {
         booking.setItem(item);
         booking.setStatus(Status.APPROVED);
 
-        // when
         BookingDto dto = BookingMapper.mapToBookingDto(booking);
 
-        // then
         assertEquals(booking.getId(), dto.getId());
         assertEquals(booking.getStart(), dto.getStart());
         assertEquals(booking.getEnd(), dto.getEnd());
@@ -254,7 +251,6 @@ class BookingServiceImplTest {
 
     @Test
     void mapToBooking_shouldMapCorrectly() {
-        // given
         RequestBookingDto dto = new RequestBookingDto(
                 LocalDateTime.now().plusDays(1),
                 LocalDateTime.now().plusDays(2),
@@ -263,10 +259,8 @@ class BookingServiceImplTest {
         User user = new User(1L, "User", "user@example.com");
         Item item = new Item(5L, "Item", "desc", true, user, null);
 
-        // when
         Booking booking = BookingMapper.mapToBooking(dto, item, user);
 
-        // then
         assertEquals(dto.getStart(), booking.getStart());
         assertEquals(dto.getEnd(), booking.getEnd());
         assertEquals(user, booking.getBooker());

@@ -155,7 +155,6 @@ class ItemServiceImplTest {
 
         ItemDto expectedItemDto = new ItemDto();
 
-        // Mock
         when(userService.getUserById(1L)).thenReturn(userDto);
         when(requestRepository.findById(10L)).thenReturn(Optional.of(request));
         when(itemRepository.save(any(Item.class))).thenReturn(savedItem);
@@ -168,13 +167,10 @@ class ItemServiceImplTest {
             itemMapperMockedStatic.when(() -> ItemMapper.requestItemMapToItem(requestItemDto)).thenReturn(mappedItem);
             itemMapperMockedStatic.when(() -> ItemMapper.mapToItemDto(any(Item.class))).thenReturn(expectedItemDto);
 
-            // Act
             ItemDto result = itemService.saveItem(1L, requestItemDto);
 
-            // Assert
             assertNotNull(result);
             assertEquals(expectedItemDto.getName(), result.getName());
-            //   assertEquals(expectedItemDto.getRequestId(), result.getRequestId());
             verify(itemRepository).save(any(Item.class));
         }
     }

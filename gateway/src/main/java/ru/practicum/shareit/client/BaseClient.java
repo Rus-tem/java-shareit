@@ -1,11 +1,9 @@
 package ru.practicum.shareit.client;
 
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.List;
 import java.util.Map;
@@ -23,13 +21,6 @@ public class BaseClient {
 
     public ResponseEntity<Object> get(String path, long userId) {
         return get(path, userId, null);
-    }
-
-    protected ResponseEntity<List<ItemDto>> getItemsByText(String path, HttpMethod method, Object requestBody, ParameterizedTypeReference<List<ItemDto>> responseType, long userId) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Sharer-User-Id", String.valueOf(userId));
-        HttpEntity<Object> requestEntity = new HttpEntity<>(requestBody, headers);
-        return rest.exchange(path, method, requestEntity, responseType);
     }
 
     protected ResponseEntity<Object> get(String path, Long userId, @Nullable Map<String, Object> parameters) {

@@ -3,11 +3,8 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.RequestComment;
 import ru.practicum.shareit.item.dto.RequestItemDto;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,18 +13,18 @@ public class ItemController {
     private final ItemClient itemClient;
 
     @GetMapping("/{itemId}")
-    public Object getItemByItemId(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                  @PathVariable("itemId") Long itemId) {
+    public ResponseEntity<Object> getItemByItemId(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                                  @PathVariable("itemId") Long itemId) {
         return itemClient.getItemByItemId(itemId, userId);
     }
 
     @GetMapping
-    public List<ItemDto> getAllItemsByUserId(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Object> getAllItemsByUserId(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return itemClient.getAllItemsByUserId(userId);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ItemDto>> getItemsByText(@RequestParam(value = "text", required = false) String searchQuery, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Object> getItemsByText(@RequestParam(value = "text", required = false) String searchQuery, @RequestHeader("X-Sharer-User-Id") Long userId) {
         return itemClient.getItemsByText(searchQuery, userId);
     }
 

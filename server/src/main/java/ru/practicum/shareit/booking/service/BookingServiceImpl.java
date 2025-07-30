@@ -31,7 +31,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto getBooking(Long userId, Long bookingId) {
         User booker = UserMapper.mapToUser(userService.getUserById(userId));
-        Booking booking = bookingRepository.findById(bookingId).get();
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new BookingValidationException("Данный booking не найден"));
+        ;
         return BookingMapper.mapToBookingDto(booking);
     }
 
@@ -47,7 +48,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> getAllBooking(Long userId) {
         User user = UserMapper.mapToUser(userService.getUserById(userId));
-        List<Booking> listOfBooking = bookingRepository.getAllBooking(user);/// конец изначальный
+        List<Booking> listOfBooking = bookingRepository.getAllBooking(user);
         return listOfBooking.stream().map(BookingMapper::mapToBookingDto).toList();
 
     }
@@ -68,7 +69,7 @@ public class BookingServiceImpl implements BookingService {
     //Подтверждение Booking
     @Override
     public BookingDto approveBooking(Long bookingId, Long userId, Boolean searchQuery) {
-        Booking booking = bookingRepository.findById(bookingId).get();
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new BookingValidationException("Данный booking не найден"));
         if ((booking.getItem().getOwner().getId().equals(userId)) && searchQuery) {
             booking.setStatus(Status.APPROVED);
             bookingRepository.save(booking);

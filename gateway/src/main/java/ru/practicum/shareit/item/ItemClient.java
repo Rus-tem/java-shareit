@@ -3,18 +3,13 @@ package ru.practicum.shareit.item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.RequestComment;
 import ru.practicum.shareit.item.dto.RequestItemDto;
-
-import java.util.List;
 
 @Service
 public class ItemClient extends BaseClient {
@@ -35,23 +30,13 @@ public class ItemClient extends BaseClient {
         return get("/" + itemId, userId);
     }
 
-    public List<ItemDto> getAllItemsByUserId(Long userId) {
-        ResponseEntity<Object> response = get("", userId);
-        Object body = response.getBody();
-        if (body instanceof List) {
-            @SuppressWarnings("unchecked")
-            List<ItemDto> itemList = (List<ItemDto>) body;
-            return itemList;
-        } else {
-            // Обработка ошибки, если ответ не является списком
-            throw new RuntimeException("Expected a List but got " + body.getClass().getName());
-        }
+    public ResponseEntity<Object> getAllItemsByUserId(Long userId) {
+        return get("");
     }
 
-    public ResponseEntity<List<ItemDto>> getItemsByText(String searchQuery, Long userId) {
+    public ResponseEntity<Object> getItemsByText(String searchQuery, Long userId) {
         String path = "/search?text=" + searchQuery;
-        return getItemsByText(path, HttpMethod.GET, null, new ParameterizedTypeReference<List<ItemDto>>() {
-        }, userId);
+        return get(path, userId, null);
     }
 
     public ResponseEntity<Object> saveItem(Long userId, RequestItemDto requestItemDto) {

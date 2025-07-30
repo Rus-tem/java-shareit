@@ -7,11 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.RequestBookingDto;
 import ru.practicum.shareit.client.BaseClient;
 
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -33,30 +31,12 @@ public class BookingClient extends BaseClient {
         return get("/" + bookingId, userId);
     }
 
-    public List<BookingDto> getBookingByOwner(Long userId) {
-        ResponseEntity<Object> response = get("", userId);
-        Object body = response.getBody();
-        if (body instanceof List) {
-            @SuppressWarnings("unchecked")
-            List<BookingDto> bookingDtoList = (List<BookingDto>) body;
-            return bookingDtoList;
-        } else {
-            // Обработка ошибки, если ответ не является списком
-            throw new RuntimeException("Expected a List but got " + body.getClass().getName());
-        }
+    public ResponseEntity<Object> getBookingByOwner(Long userId) {
+        return get("", userId);
     }
 
-    public List<BookingDto> getAllBooking(Long userId) {
-        ResponseEntity<Object> response = get("", userId);
-        Object body = response.getBody();
-        if (body instanceof List) {
-            @SuppressWarnings("unchecked")
-            List<BookingDto> bookingDtoList = (List<BookingDto>) body;
-            return bookingDtoList;
-        } else {
-            // Обработка ошибки, если ответ не является списком
-            throw new RuntimeException("Expected a List but got " + body.getClass().getName());
-        }
+    public ResponseEntity<Object> getAllBooking(Long userId) {
+        return get("", userId);
     }
 
     public ResponseEntity<Object> saveBooking(Long userId, RequestBookingDto requestBookingDto) {
@@ -67,6 +47,4 @@ public class BookingClient extends BaseClient {
         Map<String, Object> params = Map.of("approved", searchQuery);
         return patch("/" + bookingId, userId, params, null);
     }
-
-
 }

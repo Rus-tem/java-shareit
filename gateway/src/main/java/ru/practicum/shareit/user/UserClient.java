@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.user.dto.RequestUser;
-import ru.practicum.shareit.user.dto.UserDto;
-
-import java.util.List;
 
 @Service
 public class UserClient extends BaseClient {
@@ -32,17 +29,8 @@ public class UserClient extends BaseClient {
         return get("/" + userId);
     }
 
-    public List<UserDto> getAllUsers() {
-        ResponseEntity<Object> response = get("");
-        Object body = response.getBody();
-        if (body instanceof List) {
-            @SuppressWarnings("unchecked")
-            List<UserDto> userList = (List<UserDto>) body;
-            return userList;
-        } else {
-            // Обработка ошибки, если ответ не является списком
-            throw new RuntimeException("Expected a List but got " + body.getClass().getName());
-        }
+    public ResponseEntity<Object> getAllUsers() {
+        return get("");
     }
 
     public ResponseEntity<Object> saveUser(RequestUser requestUser) {

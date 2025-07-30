@@ -3,10 +3,7 @@ package ru.practicum.shareit.booking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.RequestBookingDto;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,13 +20,13 @@ public class BookingController {
 
     // Получение booking по ownerId
     @GetMapping("/owner")
-    public List<BookingDto> getBookingByOwner(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Object> getBookingByOwner(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return bookingClient.getBookingByOwner(userId);
     }
 
     // Получение всех Booking по userId
     @GetMapping
-    public List<BookingDto> getAllBooking(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Object> getAllBooking(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return bookingClient.getAllBooking(userId);
     }
 

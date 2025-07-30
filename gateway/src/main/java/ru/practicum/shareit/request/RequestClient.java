@@ -8,10 +8,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
-import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.dto.RequestItemDto;
-
-import java.util.List;
 
 @Service
 public class RequestClient extends BaseClient {
@@ -31,30 +28,12 @@ public class RequestClient extends BaseClient {
         return post("", userId, requestItemDto);
     }
 
-    public List<RequestDto> getRequestsByUserId(Long userId) {
-        ResponseEntity<Object> response = get("", userId);
-        Object body = response.getBody();
-        if (body instanceof List) {
-            @SuppressWarnings("unchecked")
-            List<RequestDto> requestDtoList = (List<RequestDto>) body;
-            return requestDtoList;
-        } else {
-            // Обработка ошибки, если ответ не является списком
-            throw new RuntimeException("Expected a List but got " + body.getClass().getName());
-        }
+    public ResponseEntity<Object> getRequestsByUserId(Long userId) {
+        return get("", userId);
     }
 
-    public List<RequestDto> getAllRequestsOtherUsers(Long userId) {
-        ResponseEntity<Object> response = get("/all", userId);
-        Object body = response.getBody();
-        if (body instanceof List) {
-            @SuppressWarnings("unchecked")
-            List<RequestDto> requestDtoList = (List<RequestDto>) body;
-            return requestDtoList;
-        } else {
-            // Обработка ошибки, если ответ не является списком
-            throw new RuntimeException("Expected a List but got " + body.getClass().getName());
-        }
+    public ResponseEntity<Object> getAllRequestsOtherUsers(Long userId) {
+        return get("/all", userId);
     }
 
     public ResponseEntity<Object> getRequestById(Long requestId, Long userId) {
